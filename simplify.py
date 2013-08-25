@@ -5,14 +5,14 @@
 import sys
 import xml.etree.ElementTree as ET
 
-prefix = '{http://www.topografix.com/GPX/1/1}'
+ns = 'http://www.topografix.com/GPX/1/1'
+prefix = '{' + ns + '}'
 
-file = sys.argv[1]
-tree = ET.parse(file)
-root = tree.getroot()
+root = ET.parse(sys.argv[1] if (len(sys.argv) == 2) else sys.stdin).getroot()
 
 print '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>'
-print '<gpx>'
+print '<gpx xmlns="' + ns + '">'
+
 for trk in root.findall(prefix + 'trk'):
     print '<trk>'
     print '<trkseg>'
@@ -26,4 +26,5 @@ for trk in root.findall(prefix + 'trk'):
             print '<trkpt lat="' + lat + '" lon="' + lon + '">' + '<ele>' + ele + '</ele><time>' + time + '</time></trkpt>'
     print '</trkseg>'
     print '</trk>'
+
 print '</gpx>'
